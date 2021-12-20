@@ -13,78 +13,90 @@ namespace DungeonGame
             //make a map
             //using wasd controls make the player move around the map
             //map levels (collection of maps conneted in a layout)
-            //
 
-            Console.Write("Please input the map size: ");
-            int mapSize = int.Parse(Console.ReadLine());
-            var map = new Map(5);
-            var player = new Player();
-            map.MapMatix[player.X, player.Y] = 'P';
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            while (true)
+            var level = new Level();
+
+            var levelMatrix = new char[20, 20];
+            for (int i = 0; i < 20; i++)
             {
-                Console.Clear();
-                Console.WriteLine($"Coins collected: {player.CoinsCollected}");
-                PrintMap(map);
-                Console.Write("Command: ");
-
-                var command = Console.ReadKey().Key;
-
-                Console.WriteLine();
-
-                map.MapMatix[player.X, player.Y] = '.';
-                player.Move(command.ToString()[0]);
-
-                if (player.IsInside(map.Size))
+                for (int j = 0; j < 20; j++)
                 {
-                    if (map.MapMatix[player.X, player.Y] == 'C')
-                    {
-                        player.CoinsCollected++;
-                        map.MapMatix[player.X, player.Y] = 'P';
-                    }
-                    else if (map.MapMatix[player.X, player.Y] == 'E')
-                    {
-                        map = new Map(mapSize);
-                        player.ResetPostion();
-                        map.MapMatix[player.X, player.Y] = 'P';
-                    }
-                    else
-                    {
-                        map.MapMatix[player.X, player.Y] = 'P';
-                    }                    
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("You hit the wall.");
-                    break;
+                    levelMatrix[i, j] = '.';
                 }
             }
-            PrintMap(map);
-            Console.WriteLine($"Coins collected: {player.CoinsCollected}");
+
+            int counter = 1;
+            foreach (var room in level.rooms)
+            {               
+                Console.WriteLine($"Room {counter} : {room.roomX} {room.roomY}");
+                counter += 1;
+                levelMatrix[(int)room.roomX + 10, (int)room.roomY + 10] = '#';
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
+                for (int j = 0; j < 20; j++)
+                {
+                    Console.Write(levelMatrix[i, j]);
+                }
+                Console.WriteLine();
+            }
+            ;
         }
 
-        private static void PrintMap(Map map)
+        private static void GetCurrentRoomCoords(Room currentRoom, Room previousRoom)
         {
-            for (int i = 0; i < map.Size; i++)
+            if (previousRoom.Up == currentRoom)
             {
-                for (int j = 0; j < map.Size; j++)
+                currentRoom.roomX = previousRoom.roomX--;
+                currentRoom.roomY = previousRoom.roomY;
+            }
+            else if (previousRoom.Down == currentRoom)
+            {
+                currentRoom.roomX = previousRoom.roomX++;
+                currentRoom.roomY = previousRoom.roomY;
+            }
+            else if (previousRoom.Left == currentRoom)
+            {
+                currentRoom.roomX = previousRoom.roomX;
+                currentRoom.roomY = previousRoom.roomY--;
+            }
+            else if(previousRoom.Right == currentRoom)
+            {
+                currentRoom.roomX = previousRoom.roomX;
+                currentRoom.roomY = previousRoom.roomY++;
+            }
+        }
+
+        private static void PrintRoom(Room room)
+        {
+            for (int i = 0; i < room.Size; i++)
+            {
+                for (int j = 0; j < room.Size; j++)
                 {
-                    if (map.MapMatix[i, j] == 'P')
+                    if (room.RoomMatix[i, j] == 'P')
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write(map.MapMatix[i, j]);
+                        Console.Write(room.RoomMatix[i, j]);
                         Console.ResetColor();
                     }
-                    else if (map.MapMatix[i,j] == 'C')
+                    else if (room.RoomMatix[i,j] == 'C')
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write(map.MapMatix[i,j]);
+                        Console.Write(room.RoomMatix[i,j]);
+                        Console.ResetColor();
+                    }
+                    else if (room.RoomMatix[i, j] == 'E')
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(room.RoomMatix[i, j]);
                         Console.ResetColor();
                     }
                     else
                     {
-                        Console.Write(map.MapMatix[i, j]);
+                        Console.Write(room.RoomMatix[i, j]);
                     }
                 }
                 Console.WriteLine();

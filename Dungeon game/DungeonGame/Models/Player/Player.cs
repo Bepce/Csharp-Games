@@ -9,8 +9,8 @@ namespace DungeonGame.Models.Player
     public class Player
     {
         private const int STARTING_HEALTH = 40;
-        private const int DEFAULT_X = 0;
-        private const int DEFAULT_Y = 0;
+        private const int DEFAULT_X = 2;
+        private const int DEFAULT_Y = 2;
 
         public Player()
         {
@@ -59,8 +59,8 @@ namespace DungeonGame.Models.Player
 
         internal void ResetPostion()
         {
-            this.X = 0;
-            this.Y = 0;
+            this.X = 2;
+            this.Y = 2;
         }
     }
 }
