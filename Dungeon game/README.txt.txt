@@ -10,8 +10,9 @@ Maps are generated randomly and they are always a square.
 
 Player starts on 0;0.
 
+Added levels (Collection of maps chained similar to the levels in binding of isaac).
+
 Future plans:
--Add Levels(Collection of maps chained similar to the levels in binding of isaac).
 -Add enemies in some form.
 -Add items and health.
 -Add shop where you can spend coins.
